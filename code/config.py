@@ -4,7 +4,7 @@ import pygame
 
 #? Variables globales    
 TITULO_VENTANA = "Turbo Tracks"
-TITULO_BD = "database/bd_btf.db"
+TITULO_BD = "assets/database/bd_btf.db"
 running = True
 FPS = 60
 
@@ -23,6 +23,7 @@ ENEMY_PATH = "assets/img/enemy.png"
 MANCHA_PATH = "assets/img/oil.png"
 MUSIC_PATH = "assets/aud/The-Perfect-Girl.mp3" 
 CRASH_PATH = "assets/aud/car_explosion.wav"
+EXPLOSION_PATH = "assets/img/Explosion.png"
 
 #? Propiedades del Auto
 ANCHO_AUTO, ALTO_AUTO = 75, 160
@@ -49,9 +50,9 @@ ANCHO_TEXTO = 300
 ALTO_TEXTO = 65
 
 CENTER_TEXT_X = CENTER_X - ANCHO_TEXTO / 2
-POS_SCORE = (20, ALTO_VENTANA - 40)
+POS_SCORE = (12, ALTO_VENTANA - 40)
 POS_INGRESO = (CENTER_TEXT_X, 60, ANCHO_TEXTO, ALTO_TEXTO)
 
-
 #? Definimos la fuente y el tamaño de la misma 
+pygame.init()
 FUENTE = pygame.font.SysFont("Arial", 36)

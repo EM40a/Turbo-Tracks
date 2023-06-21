@@ -2,6 +2,7 @@ import pygame, ranking
 from pygame.locals import *
 from config import *
 from objetos import *
+from sprite import explosion_animation
 
 pygame.init()
 #? Definimos el tamaño, icono y titulo de la ventana 
@@ -23,8 +24,8 @@ SOUNDTRACK.play(-1)
 ranking.create(TITULO_BD)
 
 while running:
-    timers.clock.tick(FPS)
-    lista_eventos = pygame.event.get()
+    timers.clock.tick(FPS) #? FPS del juego
+    lista_eventos = pygame.event.get() #? Lista de eventos que ocurren en la ventana
     CARRETERA.dibujar(ventana_principal)
     
     #? MENU PRINCIPAL 
@@ -51,7 +52,7 @@ while running:
 
         texto_ingreso.renderizar(ventana_principal)
         texto_jugar.renderizar(ventana_principal)
-        texto_ranking.renderizar(ventana_principal)
+        texto_ranking.renderizar(ventana_principal)    
         
     #? TABLA DE JUGADORES 
     elif menu_principal.actual == menu_principal.ventana["Ranking"]:
@@ -65,7 +66,7 @@ while running:
             puntuacion = fila[-1]
             ranking_text = crear.Texto(FUENTE, f"{nombre}: {puntuacion}", rgb.GRIS_100, (100, y))
             ranking_text.renderizar(ventana_principal)
-            y += 40      
+            y += 40 #? Aumenta el espacio entre cada fila
 
         rect_home = pygame.draw.rect(ventana_principal, rgb.GRIS_200, (CENTER_TEXT_X, 465, ANCHO_TEXTO, ALTO_TEXTO))
         texto_home.renderizar(ventana_principal)      
@@ -74,10 +75,11 @@ while running:
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 if rect_home.collidepoint(evento.pos):
                     menu_principal.actual = "Inicio"
+
                 
     #? COMIENZO DEL JUEGO 
     elif menu_principal.actual == menu_principal.ventana["Juego"]:
-        texto_score = FUENTE.render(f"SCORE: {score}", True, rgb.BLANCO)
+        texto_score = FUENTE.render(f"SCORE: {score}", True, rgb.GRIS_300, rgb.AMARILLO)
         
         #? El movimiento de los objetos en la pantalla 
         CARRETERA.actualizar(movimiento_fondo)
@@ -85,19 +87,21 @@ while running:
         MANCHA.avanzar(movimiento_fondo)   
         
         if game_over:
+            #? Reinicia la posicion de los objetos
             ENEMY.mover(RANDOM, DESPLAZAMIENTO_X)
             MANCHA.mover(RANDOM, DESPLAZAMIENTO_X)
+            PLAYER.rect.centerx = CENTER_X
             ENEMY.rect.y = -ENEMY.rect.height 
             game_over = False
             score = 0
             
         if PLAYER.colisionar(MANCHA):
-            PLAYER.mover(RANDOM, DESPLAZAMIENTO_X)
+            PLAYER.mover(RANDOM, DESPLAZAMIENTO_X) #? Mueve al jugador a una posicion aleatoria
         
         if PLAYER.colisionar(ENEMY):
             ranking.update(TITULO_BD, ingreso, score)
+            explosion_animation(ventana_principal, (PLAYER.rect.x -30, PLAYER.rect.y))
             menu_principal.actual = "Inicio"
-            CRASH.play()
             game_over = True
             
         #? EVENTOS DEL JUEGO
